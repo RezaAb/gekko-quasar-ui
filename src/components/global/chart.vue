@@ -633,6 +633,16 @@
           let ctx = this;
           if (this.trades && this.trades.length) {
               _.each(this.trades, function(trade) {
+					let founded = ctx.candles.filter(function (e) {
+									let converted_start = moment(e.start).format('YYYY-MM-DD HH:mm:00');
+									converted_start = new Date(converted_start).valueOf()/1000;
+									let converted_trade = moment(trade.date).format('YYYY-MM-DD HH:mm:00');
+									converted_trade = new Date(converted_trade).valueOf()/1000;
+									//return e.start <= trade.date;
+									return converted_start <= converted_trade;
+								});
+					if(founded.length>0)
+						trade.date = founded[founded.length-1].start;
                   const formattedDate = moment(trade.date).format('YYYY-MM-DD HH:mm:00')
                   let tradeMarker = {
                       coord: [formattedDate, trade.price],
